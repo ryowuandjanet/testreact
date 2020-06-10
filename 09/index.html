@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>demo</title>
+</head>
+<body>
+
+	<div id="example1"></div>
+
+	<script type="text/javascript" src="../js/react.development.js"></script>
+	<script type="text/javascript" src="../js/react-dom.development.js"></script>
+	<script type="text/javascript" src="../js/babel.min.js"></script>
+
+	<script type="text/babel">
+		/*
+		需求：自定義組件，功能說明如下
+		  1.界面如頁面所示
+		  2.點擊按鈕，提示第一個輸入框中的值
+		  3.當第2個輸入框失去焦點時，提示這個輸入框中的值
+		*/
+
+		// 1.定義組件
+		class MyComponent extends React.Component{
+			constructor(props){
+				super(props)
+				// 將新增方法中的this強制綁定為組件對象
+				this.showInput = this.showInput.bind(this)
+				this.handleBlur = this.handleBlur.bind(this)
+			}
+	
+			// 新添加方法： 內部的this默認不是組件對象，而是undefined
+			showInput(){
+				const input=this.refs.content
+				//alert(input.value)
+				alert(this.input.value)
+			}
+
+			handleBlur(event){
+				alert(event.target.value)
+			}
+
+			render(){
+				return (
+					<div>
+						<input type="text" ref={input => this.input = input} />&nbsp;&nbsp;
+						<button onClick={this.showInput}>提示輸入</button>&nbsp;&nbsp;
+						<input type="text" placeholder="失去焦點提示內容" onBlur={this.handleBlur} />
+					</div>
+				)	
+			}
+		}
+		
+		// 2.渲染組件標籤		
+		ReactDOM.render(<MyComponent /> ,document.getElementById('example1'))
+	</script>
+
+</body>
+</html>

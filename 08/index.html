@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>demo</title>
+</head>
+<body>
+
+	<div id="example1"></div>
+	<div id="example2"></div>
+
+	<script type="text/javascript" src="../js/react.development.js"></script>
+	<script type="text/javascript" src="../js/react-dom.development.js"></script>
+	<script type="text/javascript" src="../js/prop-types.js"></script>
+	<script type="text/javascript" src="../js/babel.min.js"></script>
+
+	<script type="text/babel">
+		/*
+		需求：自定義用來顯示一個人員訊息的組件，效果如頁面
+		  1.如果性別沒有指定，默認為男
+		  2.如果年齡沒有指定，默認為18
+		*/		
+
+		// 1.定義組件
+		/*
+		function Person(props){
+			return (
+				<ul>
+					<li>姓名：{props.name}</li>
+					<li>年齡：{props.age}</li>
+					<li>性別：{props.sex}</li>
+				</ul>
+			)
+		}
+		*/
+
+		class Person extends React.Component{
+			render(){
+			console.log(this)
+				return (
+					<ul>
+						<li>姓名：{this.props.name}</li>
+						<li>年齡：{this.props.age}</li>
+						<li>性別：{this.props.sex}</li>
+					</ul>
+				)	
+			}
+		}
+		
+		// 指定屬性默認值
+		Person.defaultProps ={
+			sex: '男',
+			age: 12
+		}
+
+		// 指定屬性值的類型和必要性
+		// 注意裡面首大寫及外面駝峰值的寫法
+		Person.propTypes = {
+			name: PropTypes.string.isRequired,
+			age: PropTypes.number
+		}
+
+		// 2.渲染組件標籤
+		const p1={
+			name: 'Ryowu',
+			age: 43,
+			sex: '男'
+		}
+		/*
+		...的作用
+		1. 打包
+		function fn(...as) {} fn( 1 , 2 , 3 )
+		2. 解包
+		const arr1 = [ 1 , 2 , 3 ] const arr2 =[ 6, ...arr1 , 7 ]
+		*/
+		ReactDOM.render(<Person {...p1} /> ,document.getElementById('example1'))
+
+		const p2 ={
+			name: 'Lawrences'
+		}
+
+		ReactDOM.render(<Person name={p2.name} age={11} /> ,document.getElementById('example2'))
+
+	</script>
+
+</body>
+</html>

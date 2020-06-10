@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>demo</title>
+</head>
+<body>
+
+	<div id="example1"></div>
+
+	<script type="text/javascript" src="../js/react.development.js"></script>
+	<script type="text/javascript" src="../js/react-dom.development.js"></script>
+	<script type="text/javascript" src="../js/babel.min.js"></script>
+
+	<script type="text/babel">
+		/*
+		需求：自定義組件，功能說明如下
+		  1.顯示h2標題，初始內文為：你喜歡我
+		  2.點擊標籤更新為：我喜歡妳
+		*/
+
+		// 1.定義組件
+		class Like extends React.Component{
+			constructor(props){
+				super(props)
+				// 初始化狀態
+				this.state={
+					isLikeMe: false
+				}
+				// 將新增方法中的this強制綁定為組件對象
+				this.handleClick = this.handleClick.bind(this)
+			}
+	
+			// 新添加方法： 內部的this默認不是組件對象，而是undefined
+			handleClick(){
+				const isLikeMe= !this.state.isLikeMe
+				this.setState({isLikeMe})
+			}
+
+			// 重寫組件方法
+			render(){
+				console.log('handleClick',this)
+				// 讀取狀態
+				const {isLikeMe} = this.state
+				return <h2 onClick={this.handleClick}>{isLikeMe ? '你喜歡我' :'我喜歡妳'}</h2>
+			}
+		}
+		
+		// 2.渲染組件標籤
+		ReactDOM.render(<Like />,document.getElementById('example1'))
+
+	</script>
+
+</body>
+</html>
