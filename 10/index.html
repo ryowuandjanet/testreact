@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>demo</title>
+</head>
+<body>
+
+	<div id="example1"></div>
+
+	<script type="text/javascript" src="../js/react.development.js"></script>
+	<script type="text/javascript" src="../js/react-dom.development.js"></script>
+	<script type="text/javascript" src="../js/prop-types.js"></script>
+	<script type="text/javascript" src="../js/babel.min.js"></script>
+
+	<script type="text/babel">
+		/*
+		問題：資料保存在哪一個組件裡?
+		     看資料是某個組件需要(給它)，還是某些組件需要(給共同的的父組件)
+		*/
+		class App extends React.Component{
+			constructor(props){
+				super(props)
+				this.state={
+					todos:['吃飯','睡覺','打程式碼']
+				}
+			}
+			render(){
+				return (
+					<div>
+						<h1>Simple TODO List</h1>
+						<Add />
+						<List todos={this.state.todos}/>
+					</div>
+				)
+			}
+		}	
+
+		class Add extends React.Component{
+			render(){
+				return (
+					<div>
+						<input type="text" />
+						<button>add #</button>
+					</div>
+				)
+			}
+		}	
+
+		class List extends React.Component{
+			render(){
+				const {todos} = this.props
+				return (
+					<ul>
+					{
+						todos.map((todo,index) => <li key={index}>{todo}</li>)
+					}
+					</ul>
+				)
+			}
+		}
+
+		List.propTypes = {
+			todos: PropTypes.array.isRequired
+		}
+
+		ReactDOM.render(<App /> ,document.getElementById('example1'))
+	</script>
+
+</body>
+</html>
