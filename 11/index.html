@@ -24,13 +24,24 @@
 				this.state={
 					todos:['吃飯','睡覺','打程式碼']
 				}
+				this.addTodo=this.addTodo.bind(this)
+			}
+
+			addTodo(todo){
+				// this.state.todos.unshift(todo) //不能這麼做
+				// 先從上面的todos裡先取值
+				const {todos} = this.state
+				// unshift則是向陣列的開頭新增一個或多個元素，並且return新的長度
+				todos.unshift(todo)
+				// 更新狀態
+				this.setState({todo})
 			}
 			render(){
 				const {todos}=this.state
 				return (
 					<div>
 						<h1>Simple TODO List</h1>
-						<Add count={todos.length} />
+						<Add count={todos.length} addTodo={this.addTodo} />
 						<List todos={todos} />
 					</div>
 				)
@@ -38,18 +49,35 @@
 		}	
 
 		class Add extends React.Component{
+			constructor(props){
+				super(props)
+				this.add=this.add.bind(this)
+			}
+			add() {
+				// 1.讀取輸入的資料
+				const todo=this.todoInput.value.trim()
+				// 2.檢查合法性
+				if(!todo){
+					return
+				}
+				// 3.加入，利用父組件的addTodo()將todo傳遞給this.props
+				this.props.addTodo(todo)
+				// 4.清除輸入
+				this.todoInput.value=''
+			}
 			render(){
 				return (
 					<div>
-						<input type="text" />
-						<button>add #{this.props.count+1}</button>
+						<input type="text" ref={input => this.todoInput=input } />
+						<button onClick={this.add}>add #{this.props.count+1}</button>
 					</div>
 				)
 			}
 		}
 
 		Add.propTypes = {
-			count: PropTypes.number.isRequired
+			count: PropTypes.number.isRequired,
+			addTodo: PropTypes.func.isRequired
 		}	
 
 		class List extends React.Component{
@@ -74,4 +102,3 @@
 
 </body>
 </html>
-

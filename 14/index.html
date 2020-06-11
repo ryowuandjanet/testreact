@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>demo</title>
+</head>
+<body>
+	<div id="example1"></div>
+
+	<script type="text/javascript" src="../js/react.development.js"></script>
+	<script type="text/javascript" src="../js/react-dom.development.js"></script>
+	<script type="text/javascript" src="../js/babel.min.js"></script>
+
+	<script type="text/babel">
+		/*
+		需求：自定義組件，功能說明如下
+		  1.讓指定的內文做顯示/隱藏的動畫
+		  2.切換時間為2sec
+		  3.點撀按鈕從界面中移除組件界面
+		*/
+
+		class Life extends React.Component{
+			constructor(props){
+				super(props)
+				this.state = {
+					opacity:1
+				}
+				this.distroyComponent=this.distroyComponent.bind(this)
+			}
+
+			distroyComponent(){
+				// 利用內部函數 unmountComponentAtNode()
+				// unmountComponentAtNode()移除某一個結點( example1 結點 )
+				ReactDOM.unmountComponentAtNode(document.getElementById('example1'))
+			}
+
+			componentDidMount(){
+				this.intervalId=setInterval(function(){
+					//設定一個內文來查看計時器目前執行的狀況
+					console.log('定時器')
+					// 設定 this.state.opacity
+					let {opacity} =this.state
+					// 每次返回都遞減 0.1
+					opacity -= 0.1
+					// 當遞減到小於0時，就把 opacity 再變成 1 ，重新來過
+					if (opacity <= 0){
+						opacity =1
+					}
+					// 更新狀態
+					this.setState({opacity})
+				// 因為是重寫componentDidMount，這裡的bind(this)指的是this對象	
+				// 2000 / 200 = 10次循環
+				}.bind(this),200)
+			}
+
+			componentWillUnmount(){
+				// 清理定時器
+				clearInterval(this.intervalId)
+			}
+
+			render(){
+				const {opacity} = this.state
+				return(
+					<div>
+						<h2 style={{opacity}}>{this.props.msg}</h2>
+						<button onClick={this.distroyComponent}>不活了</button>
+					</div>
+				)
+			}
+		}
+
+		ReactDOM.render(<Life msg="React 太難了" />,document.getElementById('example1'))
+	</script>
+
+</body>
+</html>
